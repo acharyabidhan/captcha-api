@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1200px, user-scalable=0">
+    <title>Easy CAPTCHA API Documentation</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+        padding: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    p {
+        word-break: break-all;
+    }
+
+    .code {
+        font-family: monospace;
+        font-size: 110%;
+    }
+</style>
+
+<body>
+    <h1>
+        Easy CAPTCHA API Documentation
+    </h1>
+    <hr>
+    <hr>
+    <p>
+        Welcome to the CAPTCHA API documentation! This document provides an overview of the CAPTCHA API, its endpoints,
+        request/response formats, and usage guidelines. The CAPTCHA API is designed to integrate CAPTCHA (Completely
+        Automated Public Turing test to tell Computers and Humans Apart) functionality into your applications to protect
+        against automated bots and spam.
+    </p>
+    <hr>
+    <h2>
+        Base URL
+    </h2>
+    <p class="code">
+        https://api.example.com/api/captcha
+    </p>
+    <hr>
+    <h2>
+        API Endpoints
+    </h2>
+    <h3>
+        Generate a CAPTCHA Image
+    </h3>
+    <h4 class="code">
+        Endpoint: /api/captcha
+    </h4>
+    <h4 class="code">
+        Method: POST
+    </h4>
+    <p>
+        This endpoint generates a new CAPTCHA image and returns its details, including the base64 image data and
+        associated
+        token.
+    </p>
+    <h4 class="code">
+        Request Parameters: None
+    </h4>
+    <h4>Response:</h4>
+    <ul>
+        <li>
+            token: The unique token associated with the generated CAPTCHA image.
+        </li>
+        <li>
+            image_data: The data to the generated CAPTCHA image.
+        </li>
+    </ul>
+    <h4>
+        Example Request:
+    </h4>
+    <p class="code">
+        POST /api/captcha
+    </p>
+    <p class="code">
+        Content-Type: application/json
+    </p>
+    <h4>
+        Example Response:
+    </h4>
+    <p class="code">
+        { <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"token": "w6PCusOBw495", <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"image": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAI..." <br>
+        }
+    </p>
+    <h4>
+        Display image
+    </h4>
+    <p class="code">
+        &lt;!-- html --&gt; <br>
+
+        &lt;img id="cptImg" alt="captcha-image" token="none"&gt; <br><br>
+
+        //Javascript <br>
+        const captImage = document.getElementById("cptImg"); <br>
+        function showCaptchaImage(){ <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// After requesting captcha api, assuming the response <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// response = { <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token": "w6PCusOBw495", <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"image":
+        "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAI..." <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;response = JSON.parse(response); <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;captImage.src = `data:image/jpeg;charset=utf-8;base64,${response.image}`; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;captImage.token = response.token; <br>
+        }
+    </p>
+    <h3>
+        Verify a CAPTCHA
+    </h3>
+    <h4 class="code">
+        Endpoint: /api/captcha/token,value
+    </h4>
+    <h4 class="code">
+        Method: POST
+    </h4>
+    <p>
+        This endpoint verifies the user's input for a specific CAPTCHA.
+    </p>
+    <h4>
+        Request Parameters: None
+    </h4>
+    <h4>
+        Response:
+    </h4>
+    <p class="code">
+        {"response": false} <br>
+        &nbsp;&nbsp;&nbsp;&nbsp; OR <br>
+        {"response": true}
+    </p>
+    <h4>
+        Example Request:
+    </h4>
+    <p class="code">
+        POST /api/captcha/w6PCusOBw495,GH7Fj
+    </p>
+    <p class="code">
+        Content-Type: application/json
+    </p>
+    <h4>
+        Example Response:
+    </h4>
+    <p class="code">
+        {"response": true}
+    </p>
+    <hr>
+    <h2>
+        Error Handling
+    </h2>
+    <p class="code">
+        In case of an error, the API will respond: {"response": false} excluding network/http errors.
+    </p>
+    <hr>
+    <h2>
+        Usage Guidelines
+    </h2>
+    <ul>
+        <li>
+            CAPTCHA tokens are unique for each CAPTCHA image and should be stored and used for verification.
+        </li>
+        <li>
+            The CAPTCHA image URLs have a unlimited validity period. Please ensure you fetch and display the image
+            promptly.
+        </li>
+        <li>
+            To avoid excessive usage and potential abuse, it is recommended to implement rate limiting on your side.
+        </li>
+    </ul>
+    <p>
+        Remember, while CAPTCHAs serve as an effective security measure, they should be implemented alongside other
+        security measures to ensure comprehensive protection against bots and malicious activities.
+    </p>
+    <hr>
+    <h2>
+        Conclusion
+    </h2>
+    <p>
+        This concludes the documentation for the CAPTCHA API. By integrating this API into your application, you can
+        effectively protect against automated bots and ensure the security and integrity of your platform. If you have
+        any further questions or need assistance, please contact me at <i>acharyabidhan2003@gmail.com</i>
+    </p>
+    <hr>
+    <p style="text-align: center;">***</p>
+</body>
+
+</html>
